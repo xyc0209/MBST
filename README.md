@@ -1,4 +1,4 @@
-# MBST -Microservice Bad smells Testbed
+# MBST - Microservice Bad smells Testbed
 
 ## Components：
 
