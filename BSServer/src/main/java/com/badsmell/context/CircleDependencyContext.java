@@ -2,6 +2,7 @@ package com.badsmell.context;
 
 import com.badsmell.analysisentity.cdabs.AnalysisResult;
 import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 

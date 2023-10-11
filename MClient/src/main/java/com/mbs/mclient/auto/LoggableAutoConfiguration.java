@@ -10,7 +10,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages = "com.septemberhx.mclient.aspect")
+@ComponentScan(basePackages = "com.mbs.mclient.aspect")
 @ConditionalOnClass(Loggable.class)
 public class LoggableAutoConfiguration {
 

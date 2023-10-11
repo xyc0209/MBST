@@ -3,6 +3,7 @@ package com.mbs.common.log;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class MFunctionCalledLog extends MServiceBaseLog {
     private String parentId;
     private String logFromIpAddr;
     private Integer logFromPort = 0;
+
 
     public MFunctionCalledLog() {
         this.logType = MLogType.FUNCTION_CALL;

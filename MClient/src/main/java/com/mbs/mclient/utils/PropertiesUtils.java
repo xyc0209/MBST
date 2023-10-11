@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -32,7 +34,7 @@ public class PropertiesUtils {
     }
 
      String value = properties.getProperty(key);
-        logger.info("从配置文件读取参数：" + key+":  " + value);
+        logger.info(key+":  " + value);
         return value;
     }
     /**
@@ -41,18 +43,17 @@ public class PropertiesUtils {
     public static Properties loadProperties() {
         Properties properties = new Properties();
         InputStream in = null;
-        // 优先从项目路径获取连接信息
+        // getting connection information from the project path
         String confPath = System.getProperty("user.dir");
         System.out.println("user.dir"+ confPath);
-        String confPath1 = confPath + File.separator + "application.properties";
-        String confPath2 = confPath + File.separator + "application.yaml";
-        String confPath3 = confPath + File.separator + "application.yml";
+        String confPath1 = confPath + File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
+        String confPath2 = confPath +  File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.yaml";
+        String confPath3 = confPath +  File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator +  "application.yml";
         System.out.println("confPath3"+confPath3);
         File file1 = new File(confPath1);
         File file2 = new File(confPath2);
         File file3 = new File(confPath3);
         if (file1.exists() || file2.exists() || file3.exists()) {
-            logger.info("配置文件路径 :: " + file3);
             try {
                 if(file1.exists()) {
                     in = new FileInputStream(file1);
@@ -67,14 +68,15 @@ public class PropertiesUtils {
                 e.printStackTrace();
             }
         } else {
-            logger.info("项目路径[" + confPath1 + "]下并无配置文件，从classpath路径下加载");
+            List<String> fileNames = Arrays.asList("application.properties", "application.yaml", "application.yml");
+            InputStream input = null;
 
-            in = PropertiesUtils.class.getClassLoader().getResourceAsStream("application.properties");
-            if(in == null)
-                in = PropertiesUtils.class.getClassLoader().getResourceAsStream("application.yaml");
-            if(in == null)
-                in = PropertiesUtils.class.getClassLoader().getResourceAsStream("application.yml");
-            logger.info("======"+in);
+            for (String fileName : fileNames) {
+                input = PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
+                if (input != null) {
+                    break;
+                }
+            }
         }
         try {
             properties.load(in);

@@ -96,6 +96,9 @@ public class MClientSkeleton {
                 if (instance == null) {
                     instance = new MClientSkeleton();
                     serviceName = PropertiesUtils.getValue("spring.application.name");
+                    if(serviceName == null){
+                        serviceName = PropertiesUtils.getValue("name");
+                    }
                 }
             }
         }
@@ -191,6 +194,7 @@ public class MClientSkeleton {
     }
 
     public static void logFunctionCall(String mObjectId, String functionName, HttpServletRequest request) {
+
         MFunctionCalledLog serviceBaseLog = new MFunctionCalledLog();
         serviceBaseLog.setLogDateTime(DateTime.now());
         serviceBaseLog.setLogMethodName(functionName);
