@@ -46,7 +46,7 @@ public class PropertiesUtils {
         // getting connection information from the project path
         String confPath = System.getProperty("user.dir");
         System.out.println("user.dir"+ confPath);
-        String confPath1 = confPath + File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
+        String confPath1 = confPath + File.separator  + "src" + File.separator + "main" +  File.separator + "application.properties";
         String confPath2 = confPath +  File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.yaml";
         String confPath3 = confPath +  File.separator  + "src" + File.separator + "main" + File.separator + "resources" + File.separator +  "application.yml";
         System.out.println("confPath3"+confPath3);
@@ -62,6 +62,7 @@ public class PropertiesUtils {
                 in = new FileInputStream(file2);
                 }
                 else{
+                    System.out.println("confPath3 exist");
                     in = new FileInputStream(file3);
                 }
             } catch (FileNotFoundException e) {
@@ -69,11 +70,9 @@ public class PropertiesUtils {
             }
         } else {
             List<String> fileNames = Arrays.asList("application.properties", "application.yaml", "application.yml");
-            InputStream input = null;
-
             for (String fileName : fileNames) {
-                input = PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
-                if (input != null) {
+                in = PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
+                if (in != null) {
                     break;
                 }
             }
