@@ -17,13 +17,13 @@ spec:
     spec:
       containers:
         - name: mmetrics-collector-service
-          image: 192.168.1.104:5000/septemberhx/mmetrics-collector-service:v1.0.0
+          image: 172.16.17.46:8085/framework/mmetrics-collector-service:v1.0.0
           env:
             - name: LOGSTASH_IP
-              value: "192.168.1.102"
+              value: "172.16.17.37"
             - name: LOGSTASH_PORT
               value: "32001"
             - name: K8S_CLIENT_IP
-              value: "192.168.1.102"
+              value: "172.16.17.37"
             - name: K8S_CLIENT_PORT
-              value: "8082"
+              value: "8080"

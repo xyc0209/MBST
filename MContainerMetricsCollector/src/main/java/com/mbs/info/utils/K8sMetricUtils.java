@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mbs.common.base.MClusterConfig.K8S_NAMESPACE;
+import static com.mbs.common.base.MClusterConfig.K8S_NAMESPACE_REGEX;
 
 @Component
 public class K8sMetricUtils {
@@ -56,7 +56,7 @@ public class K8sMetricUtils {
         if (response != null) {
             resultList = response.getItems();
         }
-        resultList.removeIf(podMetrics -> !podMetrics.getMetadata().getNamespace().equals(K8S_NAMESPACE));
+        resultList.removeIf(podMetrics -> !podMetrics.getMetadata().getNamespace().matches(K8S_NAMESPACE_REGEX));
         return resultList;
     }
 }

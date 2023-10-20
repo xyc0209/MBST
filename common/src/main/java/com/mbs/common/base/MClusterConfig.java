@@ -52,7 +52,7 @@ public class MClusterConfig {
     public final static String MGATEWAY_ALL_USER_URI = "/allUser";
 
 
-    public final static String K8S_NAMESPACE = "kube-test";
+    public final static String K8S_NAMESPACE_REGEX = "kube-test([-a-z0-9]*[a-z0-9])?";
     public final static String MCLUSTERAGENT_NAME = "MClusterAgent";
 
     public final static String REQUEST_SHOULD_SEND_TO_CLOUD = "request should send to cloud";
