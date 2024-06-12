@@ -38,7 +38,7 @@ public class FileFactory {
         int maxDepth = 10;
         Stream<Path> stream = Files.find(start,maxDepth,(filepath, attributes) -> true);
         applicationYamlOrProperities = stream.sorted().map(String::valueOf).filter(filepath ->{
-            if((String.valueOf(filepath).toLowerCase().endsWith("application.yml") || String.valueOf(filepath).toLowerCase().endsWith("application.yaml") || String.valueOf(filepath).toLowerCase().endsWith("application.properties")) && !String.valueOf(filepath).toLowerCase().contains("target")){
+            if((String.valueOf(filepath).toLowerCase().endsWith("application.yml") || String.valueOf(filepath).toLowerCase().endsWith("application.yaml") || String.valueOf(filepath).toLowerCase().endsWith("application.properties") || String.valueOf(filepath).toLowerCase().endsWith("bootstrap.yml")) && !String.valueOf(filepath).toLowerCase().contains("target") && !String.valueOf(filepath).toLowerCase().contains("test")){
                 return true;
             }
             else {
@@ -46,6 +46,17 @@ public class FileFactory {
             }
         }).collect(Collectors.toList());
         return  applicationYamlOrProperities;
+    }
+
+    public boolean isControllerFileExists(String servicesDirectory) throws IOException {
+        Path start = Paths.get(servicesDirectory);
+        int maxDepth = 10;
+        Stream<Path> stream = Files.find(start, maxDepth, (filePath, attributes) -> true);
+
+        return stream
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .anyMatch(fileName -> { return fileName.toLowerCase().contains("controller") || fileName.toLowerCase().contains("web");});
     }
 
     public List<String> getStaticFiles(String servicesDirectory) throws IOException {

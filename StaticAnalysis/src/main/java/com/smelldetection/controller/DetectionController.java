@@ -191,11 +191,17 @@ public class DetectionController {
         now = System.currentTimeMillis();
         times.put("multipath",now - cur);
         systemContext.setTimes(times);
-//        systemContext.setEsbServiceContext(esbService.getESBServices(requestItem));
+        systemContext.setEsbServiceContext(esbService.getESBServices(requestItem));
 //        systemContext.setTmsContext(tooMuchStandardsService.getTMSServices(requestItem));
-//        systemContext.setGreedyContext(greedyService.getGreedySvc(requestItem));
-//        systemContext.setHubContext(hubService.getHubClass(requestItem));
-//        systemContext.setScatteredContext(scatteredService.getSFServices(requestItem));
+        cur =System.currentTimeMillis();
+        systemContext.setGreedyContext(greedyService.getGreedySvc(requestItem));
+        now = System.currentTimeMillis();
+        times.put("greedy",now - cur);
+       systemContext.setHubContext(hubService.getHubClass(requestItem));
+        cur =System.currentTimeMillis();
+       systemContext.setScatteredContext(scatteredService.getSFServices(requestItem));
+        now = System.currentTimeMillis();
+        times.put("scatter",now - cur);
         return systemContext;
     }
 }

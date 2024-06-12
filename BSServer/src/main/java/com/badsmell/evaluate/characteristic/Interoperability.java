@@ -19,19 +19,21 @@ public class Interoperability {
     public static int weight;
 
     public static int sum(){
-        int sum = noCircleDependencies + noServiceGreedy + separatedDatabase + unitaryStandards + noScatteredFunctionality + noESB + appropriateSvcIntimacy;
+        int sum =  noServiceGreedy + separatedDatabase + unitaryStandards - noScatteredFunctionality - noCircleDependencies + noESB + appropriateSvcIntimacy;
         return sum;
     }
 
     public static double caculateInteroperability(CaculateService caculateService){
+        System.out.println("caculateService.getSeparatedDatabaseCoverage()"+caculateService.getSeparatedDatabaseCoverage());
+        System.out.println("caculateService.getAppropriateSvcIntimacyCoverage()"+caculateService.getAppropriateSvcIntimacyCoverage());
+        System.out.println("getUnitaryStandardsCoverage"+caculateService.getUnitaryStandardsCoverage());
         return ( noServiceGreedy * caculateService.getNoServiceGreedyCoverage() + separatedDatabase * caculateService.getSeparatedDatabaseCoverage() +
-                appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() + unitaryStandards * caculateService.getUnitaryStandardsCoverage() +
+                appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() + unitaryStandards * caculateService.getUnitaryStandardsCoverage() -
                 noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() + noESB * caculateService.getNoESBCoverage() -
                 noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() ) / (double) sum();
-
     }
     public static void main(String[] args) {
         System.out.println(Interoperability.sum());
     }
-
 }
+

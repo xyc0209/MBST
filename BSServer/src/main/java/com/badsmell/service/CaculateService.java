@@ -36,7 +36,7 @@ public class CaculateService {
     private double noServiceGreedyCoverage;
     private double hasApiGatewayCoverage;
     private double separatedDependencyCoverage;
-    private double unitaryStandardsCoverage;
+    private double unitaryStandardsCoverage = 1;
     private double correctServicesCutCoverage;
     private double noHubCoverage;
     private double noScatteredFunctionalityCoverage;
@@ -61,7 +61,7 @@ public class CaculateService {
         processGreedyContext(systemContext.getGreedyContext());
         processGateWayContext(systemContext.getGateWayContext());
         processSharedLibraryContext(systemContext.getSharedLibraryContext());
-        processTMSContext(systemContext.getTmsContext());
+//        processTMSContext(systemContext.getTmsContext());
         processWrongCutContext(systemContext.getWrongCutContext());
         processHubContext(systemContext.getHubContext());
         processScatteredContext(systemContext.getScatteredContext());
@@ -121,9 +121,7 @@ public class CaculateService {
                 sum += tmsContext.getValueMap().getProgramingLang().get(language).getBytes();
             }
             unitaryStandardsCoverage = javaCount/sum;
-
         }
-
     }
     public void processWrongCutContext(WrongCutContext wrongCutContext){
         correctServicesCutCoverage = 1- wrongCutContext.getWrongCutMap().size() / (double)servicesCount;

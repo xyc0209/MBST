@@ -22,7 +22,7 @@
 
 ## The process of deploy：
 
-#### Build
+### Build
 
 1. export `JAVA_HOME` to java 8.
 
@@ -36,7 +36,8 @@
 4. create a namespace named `kube-test` with `kubectl create namespace kube-test.
 
 #### Microservice system for detecting
-
+Adapt the microservice system to the BSF using the MBSTAdapter
+The main workflow of the MBSTAdapter is as follows:
 1. Add dependencies in pom.xml
 
    ```java
@@ -60,8 +61,19 @@
    ```
 
 
+2. Modify the Controller class make it extend MObject, and add the annotation @MRestApiType to the methods of each Controller class.
 
-2. Create a folder named config in the directory where the startup class is located (if it doesn't already exist), and in that folder create LoggableAutoConfiguration.java.
+
+3. Add the annotation @Loggable to each method in the @Repository annotated interface.
+
+
+4. If there is a service invocation using RestTemplate in the method of the service implementation class, add the following code before the service invocation in the method body
+   ```java
+   headers.remove("Host");
+   ```
+
+
+5. Create a folder named config in the directory where the startup class is located (if it doesn't already exist), and in that folder create LoggableAutoConfiguration.java.
 
    ```java
     import com.mbs.mclient.aspect.LoggingAspect;
@@ -80,25 +92,12 @@
         }
     }
    ```
+   
+6. Modify source code, Add @ServletComponentScan("com.septemberhx.common.filter") to the startup class of each microservice.
 
 
 
-3. Modify source code，Add @ServletComponentScan("com.septemberhx.common.filter") to the startup class of each microservice.
-
-4. Modify the Controller class make it extend MObject, and add the annotation @MRestApiType to the methods of each Controller class.
-
-5. Add the annotation @Loggable to each method in the @Repository annotated interface.
-
-6. When we make a service call using RestTemplate, we should make the following adjustments if we use the headers we received earlier:
-
-   ```java
-   headers.remove("Content-Type");
-   headers.remove("Host");
-   ```
-
-   and then call the RestTemplate class method to complete the service call.
-
-7. maven install microservices and run them on Kubernetes cluster.
+Then use Maven to install the microservices and then run them on a Kubernetes cluster.
 
 #### Static Analysis
 

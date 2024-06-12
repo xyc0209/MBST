@@ -21,7 +21,7 @@ public class FaultTolerance {
 
 
     public static int sum(){
-        int sum = hasApiVersion + hasApiGateway + separatedDependency + separatedDatabase + appropriateSvcIntimacy + noCircleReference + noESB;
+        int sum = hasApiVersion - hasApiGateway + separatedDependency + separatedDatabase + appropriateSvcIntimacy + noCircleReference + noESB;
         return sum;
     }
 

@@ -34,14 +34,14 @@ public class GreedyService {
         ApiVersionContext apiVersionContext = new ApiVersionContext();
         for (String svc : servicesPath) {
             List<String> applicationYamlOrPropertities = fileFactory.getApplicationYamlOrPropertities(svc);
+            Boolean isControllerFileExists = fileFactory.isControllerFileExists(svc);
             List<String> staticFiles = fileFactory.getStaticFiles(svc);
             Yaml yaml = new Yaml();
             String serviceName = "";
-            Set<String> entitySet = new HashSet<>();
             if (applicationYamlOrPropertities.size() == 0)
                 continue;
             for (String app : applicationYamlOrPropertities) {
-                if (app.endsWith("yaml")) {
+                if(app.endsWith("yaml") || app.endsWith("yml")){
                     Map map = yaml.load(new FileInputStream(app));
                     Map m1 = (Map) map.get("spring");
                     Map m2 = (Map) m1.get("application");
@@ -53,10 +53,11 @@ public class GreedyService {
                     serviceName = (String) p.get("spring.application.name");
                 }
             }
-            if(!staticFiles.isEmpty() && staticFiles.size() <= 2){
+            if(!staticFiles.isEmpty() && staticFiles.size() <= 2 && isControllerFileExists){
+                System.out.println("staticFiles"+staticFiles.toString());
                 greedyContext.addGreedySvc(new ServiceItem(serviceName, staticFiles));
             }
-            else if(staticFiles.isEmpty() && wrongServiceCutService.getServicesEntityCount(request).getWrongCutMap().containsKey(serviceName) && wrongServiceCutService.getServicesEntityCount(request).getWrongCutMap().get(serviceName).get("entityCount") <1 )
+            else if(staticFiles.isEmpty() && wrongServiceCutService.getServicesEntityCount(request).getWrongCutMap().containsKey(serviceName) && wrongServiceCutService.getServicesEntityCount(request).getWrongCutMap().get(serviceName).get("entityCount") <1 && isControllerFileExists)
                 greedyContext.addGreedySvc(new ServiceItem(serviceName, staticFiles));
         }
         if(!greedyContext.getGreedySvc().isEmpty())

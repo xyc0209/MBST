@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -62,10 +63,17 @@ public class ApiParserUtils {
         String preUrl = "";
         if(urlItem.getUrl1() != null) {
             preUrl = urlItem.getUrl1().substring(1, urlItem.getUrl1().length() - 1);
+            System.out.println("urlItem"+urlItem.toString());
+            System.out.println("urlItem.getUrl2().keySet()"+urlItem.getUrl2().keySet());
         }
-
         for(String methodName: urlItem.getUrl2().keySet()){
             String afterUrl= urlItem.getUrl2().get(methodName);
+            System.out.println("methodName---"+methodName);
+            System.out.println("afterUrl--"+afterUrl);
+            if(afterUrl == null){
+                apiVersionContext.getMissingUrlMap().get(serviceName).put(methodName,preUrl);
+                continue;
+            }
             if(afterUrl.equals("")){
                 apiVersionContext.getMissingUrlMap().get(serviceName).put(methodName,preUrl);
                 if(!this.apiPattern(preUrl)) {
@@ -515,6 +523,9 @@ public class ApiParserUtils {
         public void visit(MethodDeclaration n, Object arg) {
             if (n.getAnnotations() != null) {
                 for (AnnotationExpr annotation : n.getAnnotations()) {
+                    System.out.println("annotation.getClass()"+annotation.getClass());
+                    System.out.println("annotation.getName().asString()"+annotation.getName().asString());
+                    System.out.println("n.getName().asString()"+n.getName().asString());
                     if(annotation.getClass().equals(SingleMemberAnnotationExpr.class)){
                         if(annotation.getName().asString().equals("RequestMapping") ||
                                 annotation.getName().asString().equals("PostMapping")||
@@ -524,8 +535,9 @@ public class ApiParserUtils {
                                 annotation.getName().asString().equals("PatchMapping")){
                             UrlItem urlItem = (UrlItem) arg;
                             String url2 = ((SingleMemberAnnotationExpr) annotation).getMemberValue().toString();
+                            System.out.println("n.getName().asString()"+n.getName().asString());
+                            System.out.println("url2"+url2);
                             urlItem.getUrl2().put(n.getName().asString(), url2);
-
                         }
                     }
                     else if (annotation.getClass().equals(NormalAnnotationExpr.class)) {
@@ -548,6 +560,21 @@ public class ApiParserUtils {
                                 }
                             }
                         }
+                    } else if (annotation.getClass().equals(MarkerAnnotationExpr.class)) {
+                        if(annotation.getName().asString().equals("RequestMapping") ||
+                                annotation.getName().asString().equals("PostMapping")||
+                                annotation.getName().asString().equals("GetMapping") ||
+                                annotation.getName().asString().equals("PutMapping") ||
+                                annotation.getName().asString().equals("DeleteMapping") ||
+                                annotation.getName().asString().equals("PatchMapping")){
+                            UrlItem urlItem = (UrlItem) arg;
+                            String url2 = "";
+                            System.out.println("n.getName().asString()"+n.getName().asString());
+                            System.out.println("url2"+url2);
+                            urlItem.getUrl2().put(n.getName().asString(), url2);
+                            return;
+                        }
+                        
                     }
                 }
             }

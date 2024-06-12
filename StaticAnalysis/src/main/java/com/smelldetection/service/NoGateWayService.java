@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,10 @@ public class NoGateWayService {
         boolean hasProperity = false;
         Yaml yaml = new Yaml();
         for (String pom: pomFiles) {
+            System.out.println("POM"+pom);
             Model svc1 = mavenReader.read(new FileReader(pom));
             for (Dependency dependency1 : svc1.getDependencies()) {
+                System.out.println("TEST"+dependency1.toString());
                 if (dependency1.getGroupId().equals("org.springframework.cloud") && dependency1.getArtifactId().equals("spring-cloud-starter-gateway")) {
                     gateWayContext.setType(GateWayType.SpringCloudGateWay);
                     hasDependency = true;
@@ -61,6 +64,7 @@ public class NoGateWayService {
         Map gateway = null;
         Map zuul = null;
         for (String app : applicationYamlOrPropertities) {
+            System.out.println("app"+app);
             if (app.endsWith("yaml") || app.endsWith("yml")) {
                 Map map = yaml.load(new FileInputStream(app));
                 Map m1 = (Map) map.get("spring");
@@ -87,7 +91,7 @@ public class NoGateWayService {
             }
 
         }
-        if(hasDependency && hasProperity){
+        if(hasDependency || hasProperity){
             gateWayContext.setHasGateWay(true);
             gateWayContext.setStatus(false);
             return  gateWayContext;

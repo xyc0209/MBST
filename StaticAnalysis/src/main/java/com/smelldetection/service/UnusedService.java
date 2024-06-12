@@ -99,7 +99,7 @@ public class UnusedService {
                             count++;
                         }
                     }
-                    if (!this.isFullyUsed(sum, count)) {
+                    if (!this.isFullyUsed(unusedType.getName(),sum, count)) {
                         if (unusedType.isInterface()) {
 
                             if (unusedContext.getNotFullyUsedInterface().containsKey(serviceName)) {
@@ -128,7 +128,9 @@ public class UnusedService {
         return unusedContext;
     }
 
-    public boolean isFullyUsed(int sum, int count){
-        return (3 * count >=sum) ? false : true;
+    public boolean isFullyUsed(String name, int sum, int count){
+        if(sum == 0 && name.toLowerCase().endsWith("repository"))
+            return true;
+        else return (3 * count >=sum) ? false : true;
     }
 }

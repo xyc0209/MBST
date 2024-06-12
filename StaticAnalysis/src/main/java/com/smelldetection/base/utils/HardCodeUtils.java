@@ -39,6 +39,7 @@ public class HardCodeUtils {
      * @return  返回分析结果
      */
     public static HardCodeContext analysisAllFiles(String path, List<String> fileType, List<String> excludeDir) throws IOException {
+        long cur =System.currentTimeMillis();
         FileFactory fileFactory = new FileFactory();
         List<String> resultList = new LinkedList<>();
         List<String> servicePath = fileFactory.getServicePaths(path);
@@ -52,6 +53,8 @@ public class HardCodeUtils {
         }
         if(!hcAnalysisResult.getAnalysisResult().isEmpty())
             hcAnalysisResult.setStatus(true);
+        cur -=System.currentTimeMillis();
+        System.out.println("cur"+cur);
         return hcAnalysisResult;
     }
 

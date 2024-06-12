@@ -52,7 +52,7 @@ public class SharedLibraryService {
                                     sharedLibrary = dependency1.getGroupId() + "." + dependency1.getArtifactId() +"." + dependency1.getVersion();
                             else
                                 sharedLibrary = dependency1.getGroupId() + "." + dependency1.getArtifactId();
-                            if(sharedLibrary.startsWith("org.springframework.boot"))
+                            if(sharedLibrary.startsWith("org.springframework.boot") || sharedLibrary.startsWith("org.springframework.cloud."))
                                 continue;
                             String services1 = svc1.getGroupId() +"." +svc1.getArtifactId();
                             String services2 = svc2.getGroupId() +"." +svc2.getArtifactId();

@@ -22,9 +22,12 @@ public class HardCodeService {
     public FileFactory fileFactory;
 
     public HardCodeContext getHardCode(RequestItem request) throws IOException {
+        long cur =System.currentTimeMillis();
         String path = request.getServicesPath();
         List<String> filesType = Arrays.asList("java","js","py");
         List<String> excludeDir = Arrays.asList("target");
+        cur -=System.currentTimeMillis();
+        System.out.println("cur"+cur);
         return HardCodeUtils.analysisAllFiles(path,filesType,excludeDir);
     }
 

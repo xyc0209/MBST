@@ -38,6 +38,7 @@ public class Analysability {
     }
 
     public static double caculateAnalysability(CaculateService caculateService){
+        System.out.println("---caculateService.getNoCircleDependenciesCoverage()"+caculateService.getNoCircleDependenciesCoverage());
         return (hasApiVersion * caculateService.getHasApiVersionCoverage() + noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() +
                 noHardcode * caculateService.getNoHardcodeCoverage() + noServiceGreedy * caculateService.getNoServiceGreedyCoverage() +
                 hasApiGateway * caculateService.getHasApiGatewayCoverage() + separatedDatabase * caculateService.getSeparatedDatabaseCoverage() +

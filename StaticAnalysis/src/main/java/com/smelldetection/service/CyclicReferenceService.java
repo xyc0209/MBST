@@ -50,11 +50,16 @@ public class CyclicReferenceService {
         String serviceName = "";
         for (String app : applicationYamlOrPropertities) {
             if (app.endsWith("yaml") || app.endsWith("yml")) {
+                System.out.println("app"+app);
                 Yaml yaml = new Yaml();
                 Map map = yaml.load(new FileInputStream(app));
                 Map m1 = (Map) map.get("spring");
+                System.out.println("m1"+m1.toString());
                 Map m2 = (Map) m1.get("application");
-                serviceName = (String) m2.get("name");
+                if(m2 == null)
+                    System.out.println("-----------"+m1.toString());
+                if(m2 != null)
+                    serviceName = (String) m2.get("name");
             } else {
                 InputStream in = new BufferedInputStream(new FileInputStream(app));
                 Properties p = new Properties();

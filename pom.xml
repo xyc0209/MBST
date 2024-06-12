@@ -13,7 +13,9 @@
         <module>MInfoCollector</module>
         <module>MContainerMetricsCollector</module>
         <module>BSServer</module>
+        <module>MBSTAdapter</module>
         <module>StaticAnalysis</module>
+        <module>MBSTAdapter</module>
     </modules>
     <packaging>pom</packaging>
 

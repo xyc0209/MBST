@@ -32,6 +32,7 @@ public class MultipathImplementationService {
     public NodeUtils nodeUtils;
 
     public MultiPathContext getMultipathClass(RequestItem request) throws IOException {
+        long cur =System.currentTimeMillis();
         String path = request.getServicesPath();
         String servicesDirectory = new File(path).getAbsolutePath();
         List<String> servicesPath = fileFactory.getServicePaths(servicesDirectory);
@@ -115,6 +116,8 @@ public class MultipathImplementationService {
         }
         if(!multiPathContext.getMultiItems().isEmpty())
             multiPathContext.setStatus(true);
+        cur= cur - System.currentTimeMillis();
+        System.out.println("times--"+cur);
         return multiPathContext;
     }
 //    public boolean isNormalMultipath(List<String> list1, List<String> list2){

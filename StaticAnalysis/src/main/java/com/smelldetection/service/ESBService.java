@@ -18,11 +18,15 @@ public class ESBService {
     public ESBServiceContext getESBServices(RequestItem request) {
         String path = request.getServicesPath();
         ESBServiceContext esbServiceContext = new ESBServiceContext();
+        System.out.println("esbServiceContext--"+esbServiceContext.toString());
         esbServiceContext.setResult(esbParserUtils.ESBUsageAnalysis(path));
-        for (String service : esbServiceContext.getResult().keySet()) {
-            if (esbServiceContext.getResult().get(service).getIsESBUsage()) {
-                esbServiceContext.setStatus(true);
-                break;
+        System.out.println("esbServiceContext.getResult()"+esbServiceContext.getResult());
+        if(esbServiceContext.getResult().keySet() != null) {
+            for (String service : esbServiceContext.getResult().keySet()) {
+                if (esbServiceContext.getResult().get(service).getIsESBUsage()) {
+                    esbServiceContext.setStatus(true);
+                    break;
+                }
             }
         }
 

@@ -39,11 +39,13 @@ public class SharedDatabaseAndServiceIntimacyService {
         SharedDatabaseContext sharedDatabaseContext = new SharedDatabaseContext();
         for(String app: applicationYamlOrProperties){
             String serviceName = "";
+            System.out.println("app"+app);
             if(app.endsWith("yaml") || app.endsWith("yml")){
                 Map map = yaml.load(new FileInputStream(app));
                 Map m1 =(Map)map.get("spring");
                 Map m2 = (Map)m1.get("application");
-                serviceName = (String)m2.get("name");
+                if(m2 != null)
+                    serviceName = (String)m2.get("name");
             }
             else{
                 InputStream in = new BufferedInputStream(new FileInputStream(app));

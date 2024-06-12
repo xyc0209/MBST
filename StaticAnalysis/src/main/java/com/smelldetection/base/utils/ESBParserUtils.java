@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +33,7 @@ import java.util.regex.Pattern;
 @Component
 public class ESBParserUtils {
 
-    private static String regex = "(service|Service)";
+    private static String regex = "(service|Service|-)";
 
     private static String regex2 = "\\S*(service|Service|SERVICE)";
 
@@ -43,12 +44,13 @@ public class ESBParserUtils {
 
         HashMap<String,String> hashMap = getServicesList(path);
         if (hashMap.size()==0){
+            System.out.println("test--------");
             return null;
         }
         HashMap<String,HashMap<String,Integer>> mappings = new HashMap<>();
         for (Map.Entry<String,String> entry:
                 hashMap.entrySet()) {
-            HashMap<String,Integer> result = parseWebService(entry.getValue());
+            HashMap<String,Integer> result = parseWebService(hashMap, entry.getValue());
             mappings.put(entry.getKey(),result);
         }
         HashMap<String, SvcCallDetail> result = isESBUsageExist(mappings);
@@ -64,7 +66,8 @@ public class ESBParserUtils {
         HashMap<String,HashMap<String,Integer>> mappings = new HashMap<>();
         for (Map.Entry<String,String> entry:
                 hashMap.entrySet()) {
-            HashMap<String,Integer> result = parseWebService(entry.getValue());
+            HashMap<String,Integer> result = parseWebService(hashMap, entry.getValue());
+            System.out.println("result"+result.toString());
             mappings.put(entry.getKey(),result);
         }
         checkCallResult(mappings);
@@ -140,6 +143,7 @@ public class ESBParserUtils {
                 if (files[i].isDirectory()){
                     String filePath = files[i].toString();
                     String serviceName = filePath.substring(filePath.lastIndexOf(File.separator)+1);
+                    System.out.println("serviceName"+serviceName);
                     Matcher matcher = Pattern.compile(regex).matcher(serviceName);
                     if (matcher.find()){
                         serviceWithPath.put(serviceName,filePath);
@@ -153,7 +157,7 @@ public class ESBParserUtils {
     /**
      * @param path 具体微服务的目录，子模块路径
      */
-    private static HashMap<String,Integer> parseWebService(String path){
+    private static HashMap<String,Integer> parseWebService(HashMap<String,String> hashMap, String path){
         HashMap<String,Integer> resultOfService = new HashMap<>();
         Path serviceRoot = Paths.get(path);
         ProjectRoot projectRoot = new ParserCollectionStrategy().collect(serviceRoot);
@@ -168,7 +172,7 @@ public class ESBParserUtils {
             // 获取解析后的编译单元列表
             List<CompilationUnit> cuList = sourceRoot.getCompilationUnits();
             for (int i = 0; i < cuList.size(); i++) {
-                HashMap<String,Integer> resultOfFile = parseFile(cuList.get(i));
+                HashMap<String,Integer> resultOfFile = parseFile(hashMap, cuList.get(i));
                 resultOfService.putAll(resultOfFile);
             }
         });
@@ -180,7 +184,7 @@ public class ESBParserUtils {
      * 解析单个Java文件
      * @param cu 编译单元
      */
-    public static HashMap<String,Integer> parseFile(CompilationUnit cu) {
+    public static HashMap<String,Integer> parseFile(HashMap<String,String> hashMap,CompilationUnit cu) {
         HashMap<String,Integer> result = new HashMap<>();
         //types将文件中的每个class作为单个元素，保存在List中
         NodeList<TypeDeclaration<?>> types = cu.getTypes();
@@ -200,7 +204,7 @@ public class ESBParserUtils {
                 }
             }
 
-            HashMap<String,Integer> callNum =  statisticalUsage(parseStorage);
+            HashMap<String,Integer> callNum =  statisticalUsage(hashMap,parseStorage);
 
             result.putAll(callNum);
 
@@ -225,7 +229,7 @@ public class ESBParserUtils {
     }
 
 
-    private static HashMap<String, Integer> statisticalUsage(ParseStorage parseStorage) {
+    private static HashMap<String, Integer> statisticalUsage(HashMap<String,String> hashMap,ParseStorage parseStorage) {
 
         String restTemplateName = "" ;
         HashMap<String, Integer> result = new HashMap<>();
@@ -233,11 +237,13 @@ public class ESBParserUtils {
             String tmpType = parseStorage.getFieldDeclarations().get(i).getElementType().toString();
             if (tmpType.equals("RestTemplate")){
                 restTemplateName =  parseStorage.getFieldDeclarations().get(i).getVariable(0).toString();
+                System.out.println("restTemplateName"+restTemplateName);
             }
         }
         //有定义RestTemplate
         if (!"".equals(restTemplateName)){
-            result = processMethods(parseStorage,restTemplateName);
+            result = processMethods(hashMap, parseStorage,restTemplateName);
+            System.out.println("tttttttttttttt");
         }
         return result;
     }
@@ -247,7 +253,7 @@ public class ESBParserUtils {
      * 从方法中提取restTemplate的方法调用
      * @return
      */
-    private static HashMap<String, Integer> processMethods(ParseStorage parseStorage,String restTemplateName) {
+    private static HashMap<String, Integer> processMethods(HashMap<String,String> hashMap, ParseStorage parseStorage,String restTemplateName) {
 
         HashMap<String, Integer> result = new HashMap<>();
         //处理函数体
@@ -280,9 +286,12 @@ public class ESBParserUtils {
                 //如果是字符串
                 String serviceName;
                 if (set.isStringLiteralExpr()){
-                    serviceName =  getNameFromURL(set);
+                    System.out.println("set"+set.toString());
+                    serviceName =  getNameFromURL(hashMap,set);
+                    System.out.println("serviceName"+serviceName);
                     if (serviceName!=null){
-                        result.put(serviceName,result.getOrDefault(set.toString(),0)+1);
+                        System.out.println("okkkkkkkkkkk");
+                        result.put(serviceName,result.getOrDefault(serviceName,0)+1);
                     }
                 }
                 else {
@@ -330,6 +339,7 @@ public class ESBParserUtils {
             if (((MethodCallExpr)node).getScope().isPresent()){
                 String callScope = ((MethodCallExpr)node).getScope().get().toString();
                 if(restTemplateName.equals(callScope)){
+                    System.out.println("(MethodCallExpr)node).getArguments().get(0)"+((MethodCallExpr)node).getArguments().get(0));
                     callPathArgSet.add(((MethodCallExpr)node).getArguments().get(0));
                 }
             }
@@ -343,12 +353,19 @@ public class ESBParserUtils {
     }
 
 
-    private static String getNameFromURL(Expression set) {
+    private static String getNameFromURL(HashMap<String,String> hashMap,Expression set) {
         String[] strings = set.toString().split("/");
         for (int j = 0; j < strings.length; j++) {
+            System.out.println("string j"+strings[j]);
+            System.out.println("length"+strings[j].length());
+            System.out.println("hashMap"+hashMap);
+            if((strings[j].startsWith("\"")) && strings[j].endsWith("\""))
+                strings[j] = strings[j].substring(1, strings[j].length() - 1);
             Matcher matcher = Pattern.compile(regex2).matcher(strings[j]);
-            if (matcher.find())
+            if (matcher.find() || hashMap.containsKey(strings[j])) {
+                System.out.println("zzzzzzzzzzzzzzz");
                 return strings[j];
+            }
         }
         return null;
     }

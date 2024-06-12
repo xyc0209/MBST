@@ -114,8 +114,8 @@ public class AnalysisController {
         //caculate quality score
         caculateService.caculateQualityScore();
         System.out.println("------"+CaculateService.qualityScore);
-        caculateService.caculateRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface(),unevenResSvc());
-        System.out.println("------"+CaculateService.runtimeQualityScore);
+//        caculateService.caculateRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface(),unevenResSvc());
+//        System.out.println("------"+CaculateService.runtimeQualityScore);
         finalService.setFinalContext(response, caculateService);
         return finalContext;
     }
@@ -131,6 +131,7 @@ public class AnalysisController {
         RequestUserSet requestUserSet = new RequestUserSet();
         requestUserSet.handleLogs(result);
         System.out.println(requestUserSet.toString());
+        System.out.println("+++++++++++++++++++++");
         return CircleDependencyAnalysisUtils.analysisCDABS(requestUserSet);
 
     }

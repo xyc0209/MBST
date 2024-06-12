@@ -28,7 +28,9 @@ public class ScatteredService {
         Map<String, HashMap<String,Integer>> callMap =  esbParserUtils.ScatteredAnalysis(path);
         int threshold = 3;
         for(String serviceName: callMap.keySet()){
+            System.out.println("sssssssss"+serviceName);
             HashMap<String,Integer> serviceMap = callMap.get(serviceName);
+            System.out.println("serviceMap"+serviceMap.toString());
             for(String calledService: serviceMap.keySet()){
                 // if called num > threshold, this two svcs are scattered
                 if(serviceMap.get(calledService) > threshold){
