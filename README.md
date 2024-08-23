@@ -141,12 +141,36 @@ Table 1 Coverage calculation formula
 | Underused Abstract             | C = number of underused abstract classes / total number of abstract classes |
 | ESB Usage                      | C=1, exists; 0, does not exist                               |
 
-The factor of the good smells corresponding to these 17 bad smell and the quality attributes affected are shown in Table 2. ↑ means the good odor can enhance the quality attribute, ↓ means the good odor can reduce the quality attribute. In the quality attributes, T stands for Time behaviour, I stands for Interoperability, F stands for Fault tolerance, C stands for Confidentiality, M stands for Modularity, R stands for Reusability, An stands for Analysability, Mf stands for Modifiability, and Adt stands for Adaptability.
+The good practices corresponding to these 17 bad smells and their impact are shown in Table 2.
 
-Table 2 Factors of good smells and quality characteristics affected
+Table 2 Good practices and their impact
 
-| Good smell（Bad smell）      | Factor | Quality characteristics affected |
-| ---------------------------- | ------ | -------------------------------- |
+| Good practice（Bad smell）      | Impact                                                       |
+| ---------------------------- | ------------------------------------------------------------ |
+| hasAPIVersion(NAV)           | The ability to conduct in-depth analysis based on versions enhances **analysability[1, 2, 3]**.  In the context of multiple microservice versions, the capability to modify or upgrade specific versions according to changing requirements improves **modifiability[1]**.  When multiple versions exhibit different SLA levels, it enhances **fault tolerance**. |
+| noCircleDependency(CD)       | Breaking cyclic call chains to avoid forming loops enhances **analysability[1, 2, 3, 4]**. It improves code **reusability[5, 6]** and **modifiability[1, 4]**. With fewer dependencies, modifications in one module require fewer changes in others, boosting **modularity**. The system's capability to handle more business requests increases **adaptability[1]**. Decreasing the length of call chains reduces overall business processing time, enhancing **time behavior**. Reducing information exchange between microservices lowers **interoperability**. |
+| noHardcode(HC)               | The absence of fixed addresses enhances **adaptability**. Setting IP and port configurations through environment variables or configuration files improves **analysability**, **reusability**, **modifiability[1]**, and **confidentiality**. |
+| noServiceGreedy(SG)          | Each service having a more specific responsibility enhances **modularity[1]**, **analysability[1]**, **reusability**, and **adaptability[1]**. Increased interactions between modules improve **interoperability**. Clearer code localization during modifications enhances **modifiability**. |
+| hasAPIGateway(NAG)           | Front-end requests not directly communicating with microservice instances enhances **confidentiality[7]**. However, it may introduce single points of failure, lowering **fault tolerance**. Gateway management of microservice access improves **analysability** and **modifiability[1]**. |
+| seperatedDenepency(SD)       | The modification of a dependency library only affecting its corresponding microservice enhances **modifiability[1]**. Increased independence between modules improves **modularity[1, 5, 6]**. When a separate dependency library encounters issues, it does not impact other microservices, enhancing **fault tolerance[1]**. |
+| separatedPersistency(SP)     | Each service having its own dedicated database enhances **modularity[1, 5, 6]** and **adaptability**. When data issues arise, they do not affect other services, boosting **fault tolerance[1]**. Modifications to table structures and data only impact the respective service, improving **modifiability[1]**. Individual databases clarify business segmentation, enhancing **analysability**. Services possessing ownership of their private data increase **confidentiality**. Increased data access between modules after eliminating sharing enhances **interoperability**. Absence of multiple services contending for database resources improves **time behavior**. |
+| appropriateSvcIntimacy(USI)  | When one service no longer has access to the private data of another service's database, the impact is the same as for separatedPersistency. |
+| unitaryStandards(TS)         | Under the same protocol, standards, and frameworks, the code's **analysability** and **modifiability** are enhanced. Data exchange becomes more convenient, improving **interoperability**. |
+| correctServiceCut(WSC)       | Clearer delineation of responsibilities among modules enhances **modularity**, **analysability[1]**, and **reusability**. Easier to modify, increasing **modifiability[1]**. Simplifies expansion, enhancing **adaptability[1]**. |
+| noHUb(Hub)                   | A class having few dependencies on other abstract or concrete classes enhances **analysability** and **modifiability[4]**. |
+| noCircleReference(CR)        | The instability of subtypes does not affect the stability of supertypes, enhancing **fault tolerance**. Subtypes do not impact the understanding of supertypes, improving **analysability[8]**. |
+| noScatteredFunctionality(SF) | Centralizing functions within each module enhances **modularity[4]**, **reusability**, and **analysability[4]** while reducing **interoperability**. Modifications become more centralized when business logic changes, increasing **modifiability**. Easier expansion improves **adaptability**. |
+| noMultipath(MP)              | Clearer hierarchical organization of classes facilitates a better understanding of relationships between classes, enhancing **analysability[8]**. Centralization of code modifications improves **modifiability**. |
+| fullUsedAbstract(UA)         | All methods of abstract classes are utilized, enhancing **analysability**. Reducing code redundancy improves **reusability** and **adaptability**. |
+| fullUsedInterface(UI)        | All methods of interfaces are utilized, enhancing **analysability**. Reducing code redundancy improves **reusability** and **adaptability**. |
+| noESB(ESB)                   | Direct interaction between modules reduces system complexity, enhancing **modularity**, **analysability[1]**, **reusability**, **modifiability[1]**, and **adaptability[1]**. Avoiding single points of failure that can paralyze the entire system improves fault tolerance. Enhanced **interoperability** is achieved by facilitating direct interaction between modules. Absence of ESB-style services as middleware reduces the likelihood of performance bottlenecks, thereby improving **time behavior**. |
+
+The factor of the good smells corresponding to these 17 bad smells and the quality attributes affected are shown in Table 3. ↑ means the good odor can enhance the quality attribute, ↓ means the good odor can reduce the quality attribute. In the quality attributes, T stands for Time behaviour, I stands for Interoperability, F stands for Fault tolerance, C stands for Confidentiality, M stands for Modularity, R stands for Reusability, An stands for Analysability, Mf stands for Modifiability, and Adt stands for Adaptability.
+
+Table 3 Factors of good smells and quality characteristics affected
+
+| Good practice（Bad smell）     | Factor | Quality characteristics affected |
+|------------------------------| ------ | -------------------------------- |
 | hasAPIVersion(NAV)           | 3      | ↑: An,Mf,F                       |
 | noCircleDependency(CD)       | 7      | ↑: An,R,Mf,M,Adt,T ↓: I          |
 | noHardcode(HC)               | 5      | ↑: Adt,An,R,Mf,C                 |
@@ -165,7 +189,7 @@ Table 2 Factors of good smells and quality characteristics affected
 | fullUsedInterface(UI)        | 3      | ↑: An,R,Adt                      |
 | noESB(ESB)                   | 8      | ↑: M,An,R,Mf,Adt,F,I,T           |
 
-Table 3  Definitions of the selected quality characteristics in the microservice system
+Table 4  Definitions of the selected quality characteristics in the microservice system
 
 | Subcharacteristics | Description in microservice system                           |
 | ------------------ | ------------------------------------------------------------ |
@@ -179,3 +203,20 @@ Table 3  Definitions of the selected quality characteristics in the microservice
 | Testability        | The degree to which services in a microservices system can establish effective and efficient testing strategies and standards, conducting tests to verify if the services meet these standards. |
 | Adaptability       | The degree to which a microservices system effectively utilizes and adapts to diverse or evolving infrastructure environments (including hardware, operating systems, middleware, etc.) and software environments such as service orchestration and discovery. |
 
+## References
+
+[1] Pulnil S, Senivongse T. A microservices quality model based on microservices anti-patterns[C]//2022 19th International Joint Conference on Computer Science and Software Engineering (JCSSE). IEEE, 2022: 1-6.
+
+[2] Walker A, Das D, Cerny T. Automated code-smell detection in microservices through static analysis: A case study[J]. Applied Sciences, 2020, 10(21): 7800.
+
+[3] Walker A, Das D, Cerny T. Automated microservice code-smell detection[C]//Information Science and Applications: Proceedings of ICISA 2020. Springer Singapore, 2021: 211-221.
+
+[4] Zhong C, Huang H, Zhang H, et al. Impacts, causes, and solutions of architectural smells in microservices: An industrial investigation[J]. Software: Practice and Experience, 2022, 52(12): 2574-2597.
+
+[5] Taibi D, Lenarduzzi V, Pahl C. Microservices anti-patterns: A taxonomy[J]. Microservices: Science and Engineering, 2020: 111-128.
+
+[6] Taibi D, Lenarduzzi V. On the definition of microservice bad smells[J]. IEEE software, 2018, 35(3): 56-62.
+
+[7] Messina A, Rizzo R, Storniolo P, et al. The database-is-the-service pattern for microservice architectures[C]//Information Technology in Bio-and Medical Informatics: 7th International Conference, ITBAM 2016, Porto, Portugal, September 5-8, 2016, Proceedings 7. Springer International Publishing, 2016: 223-233.
+
+[8] Azadi U, Fontana F A, Taibi D. Architectural smells detected by tools: a catalogue proposal[C]//2019 IEEE/ACM International Conference on Technical Debt (TechDebt). IEEE, 2019: 88-97.
