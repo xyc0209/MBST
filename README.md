@@ -192,15 +192,15 @@ Table 3 Factors of good smells and quality characteristics affected
 Table 4  Definitions of the selected quality characteristics in the microservice system
 
 | Subcharacteristics | Description in microservice system                           |
-| ------------------ | ------------------------------------------------------------ |
+|--------------------| ------------------------------------------------------------ |
 | Time-behavior      | The extent to which each service in a microservices system can quickly respond to user requests and fulfil expected functionalities within a reasonable timeframe. |
 | Interoperability   | The degree to which microservices can efficiently exchange information and invoke functionalities through standardized interfaces and protocols. |
 | Fault tolerance    | The degree to which the failure of a specific service in a microservices system does not impact the regular operation of the entire system, and services can isolate themselves and self-heal. |
+| Confidentiality    | The degree to protect service sensitive data from unauthorized access or disclosure. |
 | Modularity         | The degree to which services in a microservices system are highly decoupled, allowing independent deployment and operation, minimizing dependencies and impacts among them. |
 | Reusability        | The degree to which services in a microservices system possess generality and reusability, enabling them to be reused by other systems or services. |
 | Analyzability      | The degree to which performance metrics, fault information, and other relevant data of each service in a microservices system can be quickly diagnosed and analyzed, facilitating timely issue detection and resolution. |
 | Modifiability      | The degree to which modifications of a specific service in a microservices system do not affect other services, allowing independent and rapid modifications. |
-| Testability        | The degree to which services in a microservices system can establish effective and efficient testing strategies and standards, conducting tests to verify if the services meet these standards. |
 | Adaptability       | The degree to which a microservices system effectively utilizes and adapts to diverse or evolving infrastructure environments (including hardware, operating systems, middleware, etc.) and software environments such as service orchestration and discovery. |
 
 ## References
