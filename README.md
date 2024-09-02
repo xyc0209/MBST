@@ -171,18 +171,18 @@ Table 3 Factors of good smells and quality characteristics affected
 
 | Good practice（Bad smell）     | Factor | Quality characteristics affected |
 |------------------------------| ------ | -------------------------------- |
-| hasAPIVersion(NAV)           | 3      | ↑: An,Mf,F                       |
+| hasAPIVersion(AV)            | 3      | ↑: An,Mf,F                       |
 | noCircleDependency(CD)       | 7      | ↑: An,R,Mf,M,Adt,T ↓: I          |
 | noHardcode(HC)               | 5      | ↑: Adt,An,R,Mf,C                 |
 | noServiceGreedy(SG)          | 6      | ↑: M,An,R,Adt,I,Mf               |
 | hasAPIGateway(NAG)           | 4      | ↑: C,An,Mf ↓: F                  |
 | seperatedDenepency(SD)       | 3      | ↑: Mf,M,F                        |
-| separatedDatabase(SDB)       | 8      | ↑: M,Adt,F,Mf,An,C,I,T           |
-| appropriateSvcIntimacy(USI)  | 8      | ↑: M,Adt,F,Mf,An,C,I,T           |
+| separatedDatabase(SP)        | 8      | ↑: M,Adt,F,Mf,An,C,I,T           |
+| appropriateSvcIntimacy(ISI)  | 8      | ↑: M,Adt,F,Mf,An,C,I,T           |
 | unitaryStandards(TS)         | 3      | ↑: An,Mf,I                       |
-| correctServiceCut(WSC)       | 5      | ↑: M,An,R,Mf,Adt                 |
+| correctServiceCut(WC)        | 5      | ↑: M,An,R,Mf,Adt                 |
 | noHUb(Hub)                   | 2      | ↑: An,Mf                         |
-| noCircleReference(CR)        | 2      | ↑: F,An                          |
+| noCircleHierarchy(CH)        | 2      | ↑: F,An                          |
 | noScatteredFunctionality(SF) | 6      | ↑: M,R,An,Mf,Adt ↓: I            |
 | noMultipath(MP)              | 2      | ↑: An,Mf                         |
 | fullUsedAbstract(UA)         | 3      | ↑: An,R,Adt                      |
