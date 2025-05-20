@@ -57,7 +57,6 @@ public class SharedDatabaseAndServiceIntimacyService {
             String line = reader.readLine();
             String pattern = "mysql://";
             String target = "";
-            int row = 0;
             while (line != null) {
                 if (line.contains(pattern)) {
                     int startIndex = line.indexOf(pattern) + 8;
@@ -98,8 +97,8 @@ public class SharedDatabaseAndServiceIntimacyService {
                 for (String service : servicesList) {
                     if (ServiceIntimacyMap.get(service).size() > 1) {
                         shared = false;
+                        break;
                     }
-                    break;
                 }
                 if(shared){
                     sharedDatabaseContext.addSharedDatabase(key,servicesList);

@@ -21,11 +21,7 @@ public class FileScanner {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    if (isControllerPackage(file)) {
-                        scanControllerPackage(file, javaFiles);
-                    } else {
-                        scanDirectory(file, javaFiles);
-                    }
+                    scanDirectory(file, javaFiles);
                 } else if (file.getName().toLowerCase().endsWith(".java")) {
                     javaFiles.add(file);
                 }

@@ -49,6 +49,22 @@ public class Analysability {
                 fullUsedInterface * caculateService.getFullUsedInterfaceCoverage() + noESB * caculateService.getNoESBCoverage()) / (double) sum();
     }
 
+    public static double caculateAnwithoutTS(CaculateService caculateService){
+        if (!caculateService.isTS()) {
+            System.out.println("---caculateService.getNoCircleDependenciesCoverage()" + caculateService.getNoCircleDependenciesCoverage());
+            return (hasApiVersion * caculateService.getHasApiVersionCoverage() + noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() +
+                    noHardcode * caculateService.getNoHardcodeCoverage() + noServiceGreedy * caculateService.getNoServiceGreedyCoverage() +
+                    hasApiGateway * caculateService.getHasApiGatewayCoverage() + separatedDatabase * caculateService.getSeparatedDatabaseCoverage() +
+                    appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() +
+                    correctServicesCut * caculateService.getCorrectServicesCutCoverage() + noHub * caculateService.getNoHubCoverage() +
+                    noCircleReference * caculateService.getNoCircleReferenceCoverage() + noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() +
+                    noMultipath * caculateService.getNoMultipathCoverage() + fullUsedAbstract * caculateService.getFullUsedAbstractCoverage() +
+                    fullUsedInterface * caculateService.getFullUsedInterfaceCoverage() + noESB * caculateService.getNoESBCoverage()) / ((double) sum() - unitaryStandards);
+        }
+        else
+            return caculateAnalysability(caculateService);
+    }
+
     public static void main(String[] args) {
         System.out.println(Analysability.sum());
     }

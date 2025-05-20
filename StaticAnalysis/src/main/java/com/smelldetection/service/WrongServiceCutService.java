@@ -54,7 +54,8 @@ public class WrongServiceCutService {
             List<String> javaFiles = fileFactory.getJavaFiles(svc);
             for (String javafile : javaFiles) {
                 File file = new File(javafile);
-                if(javafile.toLowerCase().contains("/entity/") || javafile.toLowerCase().contains("/domain/")){
+                System.out.println(javafile);
+                if(javafile.toLowerCase().contains("/entity/") || javafile.toLowerCase().contains("/domain/") || javafile.toLowerCase().contains("\\entity\\") || javafile.toLowerCase().contains("\\domain\\")){
                     entitySet.add(javafile);
                 }
                 Set<String> count = new HashSet<>();
@@ -64,10 +65,10 @@ public class WrongServiceCutService {
             }
             if(!serviceName.equals("")){
                 Map<String, Integer> map = new HashMap<>();
-                if(entitySet.size() != 0){
+//                if(entitySet.size() != 0){
                     map.put("entityCount",entitySet.size());
                     wrongCutContext.getWrongCutMap().put(serviceName,map);
-                }
+//                }
 
             }
         }
@@ -89,7 +90,9 @@ public class WrongServiceCutService {
         int size = wrongCutContext.getWrongCutMap().size();
         double avgEntityCount = this.getAvgEntityCount(wrongCutContext);
         double quadraticSum = 0.0;
+        System.out.println(wrongCutContext.getWrongCutMap().toString());
         for (String svc : wrongCutContext.getWrongCutMap().keySet()) {
+            System.out.println(svc+ ":" + wrongCutContext.getWrongCutMap().get(svc).get("entityCount").intValue());
             quadraticSum += Math.pow(wrongCutContext.getWrongCutMap().get(svc).get("entityCount").intValue() - avgEntityCount, 2);
         }
         double std = Math.sqrt(quadraticSum / size);

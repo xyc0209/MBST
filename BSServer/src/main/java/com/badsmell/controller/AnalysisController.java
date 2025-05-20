@@ -1,5 +1,6 @@
 package com.badsmell.controller;
 
+import com.badsmell.base.CustomRequestItem;
 import com.badsmell.base.MyLogger;
 import com.badsmell.base.RequestItem;
 import com.badsmell.context.*;
@@ -114,8 +115,45 @@ public class AnalysisController {
         //caculate quality score
         caculateService.caculateQualityScore();
         System.out.println("------"+CaculateService.qualityScore);
-//        caculateService.caculateRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface(),unevenResSvc());
-//        System.out.println("------"+CaculateService.runtimeQualityScore);
+        caculateService.caculateRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface(),unevenResSvc());
+        System.out.println("------"+CaculateService.runtimeQualityScore);
+        finalService.setFinalContext(response, caculateService);
+        return finalContext;
+    }
+    @RequestMapping(path = "getCustomAnalysisResults", method = RequestMethod.POST)
+    public FinalContext getCustomAnalysisResults(@RequestBody CustomRequestItem requestItem) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> params = new HashMap<>();
+//        params.put("servicesPath", "/Users/yongchaoxing/Desktop/experiment/3-circlereference");
+        params.put("servicesPath", requestItem.getServicesPath());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(params);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        String url = "http://localhost:8099/detect/v1.0/getStaticAnalysisResults";
+        SystemContext response = restTemplate.postForObject(url, requestEntity, SystemContext.class);
+        //Calculate coverage with only static analysis
+        caculateService.processCustomSystemContext(response);
+        //Determine shared database based on runtime data
+        judgeServiceRT();
+        caculateService.judgeSharedDatabase();
+        //Determine service Intimacy based on runtime data
+        judgeServiceIntimacy();
+        caculateService.judgeServiceIntimacy();
+        //Determine circle Dependency based on runtime data
+        caculateService.processCircleDependencies(judgeCircleDependencies());
+        //caculate quality score
+        caculateService.caculateCustomQualityScore(requestItem);
+        System.out.println("------"+CaculateService.qualityScore);
+        if (requestItem.isUR()) //is smell
+            caculateService.caculateRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface(),unevenResSvc());
+        else
+            caculateService.caculateCustomRuntimeScore(serviceAvailability(), unevenlyUsedSvc(), unevenInterface());
+        System.out.println("------"+CaculateService.runtimeQualityScore);
         finalService.setFinalContext(response, caculateService);
         return finalContext;
     }

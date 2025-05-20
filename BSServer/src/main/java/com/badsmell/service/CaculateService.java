@@ -1,6 +1,7 @@
 package com.badsmell.service;
 
 import com.badsmell.analysisentity.cdabs.AnalysisResult;
+import com.badsmell.base.CustomRequestItem;
 import com.badsmell.context.AvailabilityContext;
 import com.badsmell.context.UnevenIfcContext;
 import com.badsmell.context.UnevenResContext;
@@ -46,6 +47,7 @@ public class CaculateService {
     private double noESBCoverage;
     private double separatedDatabaseCoverage;
     private double appropriateSvcIntimacyCoverage;
+    private boolean TS;
     public Set<String> sharedDatabaseSet;
     public Set<String> serviceIntimacySet;
     private double noCircleDependenciesCoverage;
@@ -53,6 +55,28 @@ public class CaculateService {
     private FinalContext finalContext;
 
     public void processSystemContext(SystemContext systemContext){
+        servicesCount = systemContext.getServicesCount();
+        serviceList = systemContext.getServiceContext().getServiceList();
+        processApiVersionContext(systemContext.getApiVersionContext());
+        processCyclicReferenceContext(systemContext.getCyclicReferenceContext());
+        processHardCodeContext(systemContext.getHardCodeContext());
+        processGreedyContext(systemContext.getGreedyContext());
+        processGateWayContext(systemContext.getGateWayContext());
+        processSharedLibraryContext(systemContext.getSharedLibraryContext());
+        processTMSContext(systemContext.getTmsContext());
+        processWrongCutContext(systemContext.getWrongCutContext());
+        processHubContext(systemContext.getHubContext());
+        processScatteredContext(systemContext.getScatteredContext());
+        processMultiPathContext(systemContext.getMultiPathContext());
+        processUnusedContext(systemContext.getUnusedContext());
+        processESBServiceContext(systemContext.getEsbServiceContext());
+        processSharedDatabaseContext(systemContext.getSharedDatabaseContext());
+
+        System.out.println("fullUsedAbstractCoverage:    " + fullUsedAbstractCoverage);
+        System.out.println("fullUsedInterfaceCoverage:    " + fullUsedInterfaceCoverage);
+    }
+
+    public void processCustomSystemContext(SystemContext systemContext){
         servicesCount = systemContext.getServicesCount();
         serviceList = systemContext.getServiceContext().getServiceList();
         processApiVersionContext(systemContext.getApiVersionContext());
@@ -238,6 +262,37 @@ public class CaculateService {
                 TimeBehaviour.weight * TimeBehaviour.caculateTimeBehaviour(this)) * 100 / (double) weightSum;
 
     }
+
+    public void caculateCustomQualityScore(CustomRequestItem requestItem){
+        this.TS = requestItem.isTS();
+        int weightSum = setWeight(1, 1, 1, 1, 1, 1, 1, 1, 1);
+        System.out.println("weightSum"+weightSum);
+        System.out.println("Adaptability.weight * Adaptability.caculateAdaptability(this)"+Adaptability.weight * Adaptability.caculateAdaptability(this));
+        System.out.println("Analysability.weight * Analysability.caculateAnalysability(this)"+Analysability.weight * Analysability.caculateAnalysability(this));
+        System.out.println("Confidentiality.weight * Confidentiality.caculateConfidentiality(this)"+Confidentiality.weight * Confidentiality.caculateConfidentiality(this));
+        System.out.println("FaultTolerance.weight * FaultTolerance.caculateFaultTolerance(this)"+FaultTolerance.weight * FaultTolerance.caculateFaultTolerance(this));
+        System.out.println("Interoperability.weight * Interoperability.caculateInteroperability(this)"+Interoperability.weight * Interoperability.caculateInteroperability(this));
+        System.out.println("Modifiability.weight  * Modifiability.caculateModifiability(this)"+Modifiability.weight  * Modifiability.caculateModifiability(this));
+        System.out.println("Modularity.weight * Modularity.caculateModularity(this)"+Modularity.weight * Modularity.caculateModularity(this));
+        System.out.println("Reusability.weight * Reusability.caculateReusability(this)"+Reusability.weight * Reusability.caculateReusability(this));
+        System.out.println("TimeBehaviour.weight * TimeBehaviour.caculateTimeBehaviour(this)"+TimeBehaviour.weight * TimeBehaviour.caculateTimeBehaviour(this));
+        qualityScoreDetail = new HashMap<>();
+        qualityScoreDetail.put("Adaptability",Adaptability.weight * Adaptability.caculateAdaptability(this));
+        qualityScoreDetail.put("Analysability", Analysability.weight * Analysability.caculateAnalysability(this));
+        qualityScoreDetail.put("Confidentiality",Confidentiality.weight * Confidentiality.caculateConfidentiality(this));
+        qualityScoreDetail.put("FaultTolerance",FaultTolerance.weight * FaultTolerance.caculateFaultTolerance(this));
+        qualityScoreDetail.put("Interoperability",Interoperability.weight * Interoperability.caculateInteroperability(this));
+        qualityScoreDetail.put("Modifiability", Modifiability.weight  * Modifiability.caculateModifiability(this));
+        qualityScoreDetail.put("Modularity", Modularity.weight * Modularity.caculateModularity(this));
+        qualityScoreDetail.put("Reusability",Reusability.weight * Reusability.caculateReusability(this));
+        qualityScoreDetail.put("TimeBehaviour",TimeBehaviour.weight * TimeBehaviour.caculateTimeBehaviour(this));
+        qualityScore  = (Adaptability.weight * Adaptability.caculateAdaptability(this) +  Analysability.weight * Analysability.caculateAnwithoutTS(this) +
+                Confidentiality.weight * Confidentiality.caculateConfidentiality(this) + FaultTolerance.weight * FaultTolerance.caculateFaultTolerance(this) +
+                Interoperability.weight * Interoperability.caculateInteroperabilitywithoutTS(this) + Modifiability.weight  * Modifiability.caculateModifiabilitywithoutTS(this) +
+                Modularity.weight * Modularity.caculateModularity(this) + Reusability.weight * Reusability.caculateReusability(this) +
+                TimeBehaviour.weight * TimeBehaviour.caculateTimeBehaviour(this)) * 100 / (double) weightSum;
+
+    }
     public int setWeight(int adaptabilityWeight, int analysabilityWeight, int confidentialityWeight, int FaultToleranceWeight, int interoperabilityWeight, int modifiabilityWeight,
                      int modularityWeight, int reusabilityWeight, int timeBehaviourWeight){
         Adaptability.weight = adaptabilityWeight;
@@ -257,6 +312,7 @@ public class CaculateService {
         runtimeQualityScore =  (availabilityContext.getSoh() + unevenSvcContext.getSoh() + unevenIfcContext.getSoh() +
                 (unevenResContext.getCpuSoh() +unevenResContext.getRamSoh()) / 2) * 100 / 4;
     }
-
-
+    public void caculateCustomRuntimeScore(AvailabilityContext availabilityContext, UnevenSvcContext unevenSvcContext, UnevenIfcContext unevenIfcContext){
+        runtimeQualityScore =  (availabilityContext.getSoh() + unevenSvcContext.getSoh() + unevenIfcContext.getSoh() ) * 100 / 3;
+    }
 }

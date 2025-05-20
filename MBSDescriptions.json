@@ -1,0 +1,35 @@
+{
+  "name": "Poor Restful API Design",
+  "aliases": ["Inadequate Use of APIs"],
+  "description": "The interface of a service offers a single and very general operation.",
+  "context": "",
+  "detection": "A service implements a large amount of functionality, but provides only one public operation to invoke all of it. Accepted requests are internally forwarded to various methods.",
+  "consequences": "Analyzability and understandability are reduced, because the service does not publish all its provided functionality in a clear manner. Therefore, a user has to analyze the implementation of the service before using it.",
+  "cause": "May easily appear in pub-sub systems, where interactions are not explicitly modeled and multiple services exchange event messages via a shared event bus.",
+  "solution": "Split the single generic operation into multiple more specialized operations.",
+  "example": "Interface with a single public operation that takes a generic type as parameter.",
+  "sources": [
+    "@inproceedings{garcia2009toward, author = {Garcia, Joshua and Popescu, Daniel and Edwards, George and Medvidovic, Nenad}, title = {Toward a Catalogue of Architectural Bad Smells}, booktitle = {Proceedings of the 5th International Conference on the Quality of Software Architectures: Architectures for Adaptive Software Systems}, series = {QoSA '09}, year = {2009}, isbn = {978-3-642-02350-7}, location = {East Stroudsburg, PA, USA}, pages = {146--162}, numpages = {17}, url = {http://dx.doi.org/10.1007/978-3-642-02351-4_10}, doi = {10.1007/978-3-642-02351-4_10}, publisher = {Springer-Verlag}, address = {Berlin, Heidelberg}}",
+    "@inproceedings{de2014architectural, author = {de Andrade, Hugo Sica and Almeida, Eduardo and Crnkovic, Ivica}, year = {2014}, month = {04}, pages = {12}, title = {Architectural bad smells in Software Product Lines: An exploratory study}, journal = {ACM International Conference Proceeding Series}, doi = {10.1145/2578128.2578237}}"
+  ],
+  "tags": [
+    "microservices",
+    "soa",
+    "application",
+    "ambiguity"
+  ],
+  "relatedItems": [
+    {
+      "relation": "relates",
+      "name": "Bloated Service"
+    }
+  ],
+  "evidence": 7.9440872082295275,
+  "relatedAntiPatterns": [
+    {
+      "relation": "relates",
+      "name": "Bloated Service",
+      "description": "A service that has one large interface with many parameter data types and performs mostly heterogeneous operations with low cohesion."
+    }
+  ]
+}

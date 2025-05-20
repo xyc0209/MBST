@@ -243,7 +243,6 @@ public class ESBParserUtils {
         //有定义RestTemplate
         if (!"".equals(restTemplateName)){
             result = processMethods(hashMap, parseStorage,restTemplateName);
-            System.out.println("tttttttttttttt");
         }
         return result;
     }
@@ -290,7 +289,6 @@ public class ESBParserUtils {
                     serviceName =  getNameFromURL(hashMap,set);
                     System.out.println("serviceName"+serviceName);
                     if (serviceName!=null){
-                        System.out.println("okkkkkkkkkkk");
                         result.put(serviceName,result.getOrDefault(serviceName,0)+1);
                     }
                 }
@@ -344,7 +342,6 @@ public class ESBParserUtils {
                 }
             }
             //找到restTemplate所调用的函数的第一个参数（如果找URL，只能是在第一个参数位置）
-
             return;
         }
         for (Node child:node.getChildNodes()){
@@ -363,7 +360,6 @@ public class ESBParserUtils {
                 strings[j] = strings[j].substring(1, strings[j].length() - 1);
             Matcher matcher = Pattern.compile(regex2).matcher(strings[j]);
             if (matcher.find() || hashMap.containsKey(strings[j])) {
-                System.out.println("zzzzzzzzzzzzzzz");
                 return strings[j];
             }
         }

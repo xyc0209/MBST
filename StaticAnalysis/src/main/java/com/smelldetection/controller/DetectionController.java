@@ -64,6 +64,10 @@ public class DetectionController {
 
     @Autowired
     public  ScatteredService scatteredService;
+
+    @Autowired
+    public CBService cbService;
+
     @Autowired
     public FileFactory fileFactory;
 
@@ -71,6 +75,14 @@ public class DetectionController {
     public SharedLibraryContext SharedLibrary(@RequestBody RequestItem requestItem) throws XmlPullParserException, IOException {
         System.out.println(requestItem.getServicesPath());
         return sharedLibraryService.getSharedLibraries(requestItem);
+    }
+
+
+
+    @RequestMapping(path = "/circuitBreaker",method = RequestMethod.POST)
+    public CBContext CircuitBreaker(@RequestBody RequestItem requestItem) throws XmlPullParserException, IOException {
+        System.out.println(requestItem.getServicesPath());
+        return cbService.getCBLibraries(requestItem);
     }
 
     @RequestMapping(path = "/sharedDatabaseandServiceIntimacy",method = RequestMethod.POST)
@@ -143,6 +155,8 @@ public class DetectionController {
     public ScatteredContext getSFServices(@RequestBody RequestItem requestItem) throws IOException{
         return scatteredService.getSFServices(requestItem);
     }
+
+
     @RequestMapping(path = "getStaticAnalysisResults",method = RequestMethod.POST, produces = "application/json; charset=UTF-8", consumes = {"text/plain", "application/*"})
     public SystemContext getStaticAnalysisResults(@RequestBody RequestItem requestItem) throws XmlPullParserException, IOException, ParseException, ClassNotFoundException {
         SystemContext systemContext = new SystemContext();

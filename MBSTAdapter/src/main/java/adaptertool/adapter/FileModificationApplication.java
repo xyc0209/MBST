@@ -10,11 +10,11 @@ import java.util.List;
 
 public class FileModificationApplication {
     public static void main(String[] args) throws XmlPullParserException, IOException {
-        String projectPath = "D:\\code\\train-ticket-test-main\\adapter\\test1";
+        String projectPath = "D:\\code\\train-ticket-test-main\\adapter\\test";
         List<File> javaFiles = FileScanner.scanJavaFiles(projectPath);
-        List<File> pomFiles = FileScanner.scanPomFiles(projectPath);
-        FileModifier.modifyJavaFiles(javaFiles);
-        FileModifier.modifyPomFiles(pomFiles);
+//        List<File> pomFiles = FileScanner.scanPomFiles(projectPath);
+//        FileModifier.modifyJavaFiles(javaFiles);
+//        FileModifier.modifyPomFiles(pomFiles);
         System.out.println("---");
     }
 }

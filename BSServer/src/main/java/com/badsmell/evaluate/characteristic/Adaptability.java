@@ -32,13 +32,11 @@ public class Adaptability {
     }
 
     public static double caculateAdaptability(CaculateService caculateService){
-
         return (noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() + noHardcode * caculateService.getNoHardcodeCoverage() +
                 noServiceGreedy * caculateService.getNoServiceGreedyCoverage() + correctServicesCut * caculateService.getCorrectServicesCutCoverage() +
                 noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() + noESB * caculateService.getNoESBCoverage() +
                 separatedDatabase * caculateService.getSeparatedDatabaseCoverage() + appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() +
                 fullUsedAbstract * caculateService.getFullUsedAbstractCoverage() + fullUsedInterface * caculateService.getFullUsedInterfaceCoverage()) / (double) sum();
-
     }
 
     public static void main(String[] args) {

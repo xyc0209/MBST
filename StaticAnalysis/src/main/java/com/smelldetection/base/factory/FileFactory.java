@@ -38,7 +38,7 @@ public class FileFactory {
         int maxDepth = 10;
         Stream<Path> stream = Files.find(start,maxDepth,(filepath, attributes) -> true);
         applicationYamlOrProperities = stream.sorted().map(String::valueOf).filter(filepath ->{
-            if((String.valueOf(filepath).toLowerCase().endsWith("application.yml") || String.valueOf(filepath).toLowerCase().endsWith("application.yaml") || String.valueOf(filepath).toLowerCase().endsWith("application.properties") || String.valueOf(filepath).toLowerCase().endsWith("bootstrap.yml")) && !String.valueOf(filepath).toLowerCase().contains("target") && !String.valueOf(filepath).toLowerCase().contains("test")){
+            if((String.valueOf(filepath).toLowerCase().endsWith("application.yml") || String.valueOf(filepath).toLowerCase().endsWith("application.yaml") || String.valueOf(filepath).toLowerCase().endsWith("application.properties") || String.valueOf(filepath).toLowerCase().endsWith("bootstrap.yml")) && !String.valueOf(filepath).toLowerCase().contains("target") && !String.valueOf(filepath).toLowerCase().contains("/test/") && !String.valueOf(filepath).toLowerCase().contains("\\test\\")){
                 return true;
             }
             else {

@@ -44,7 +44,20 @@ public class K8sMetricUtils {
         }
         return resultList;
     }
-
+    public static List<MPodMetrics> testPod() {
+        List<MPodMetrics> resultList = new ArrayList<>();
+        MPodsMetricsResponse response = MRequestUtils.sendRequest(
+                MUrlUtils.getRemoteUri("10.245.1.233", 6443, getMetricsPodsUrl()),
+                null,
+                MPodsMetricsResponse.class,
+                RequestMethod.GET
+        );
+        if (response != null) {
+            resultList = response.getItems();
+        }
+        resultList.removeIf(podMetrics -> !podMetrics.getMetadata().getNamespace().equals(K8S_NAMESPACE));
+        return resultList;
+    }
     public static List<MPodMetrics> getPodsMetrics() {
         List<MPodMetrics> resultList = new ArrayList<>();
         MPodsMetricsResponse response = MRequestUtils.sendRequest(
@@ -59,4 +72,9 @@ public class K8sMetricUtils {
         resultList.removeIf(podMetrics -> !podMetrics.getMetadata().getNamespace().equals(K8S_NAMESPACE));
         return resultList;
     }
+
+    public static void main(String[] args) {
+        System.out.println(testPod().toString());
+    }
+
 }

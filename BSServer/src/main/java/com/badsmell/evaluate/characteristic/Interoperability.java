@@ -32,6 +32,19 @@ public class Interoperability {
                 noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() + noESB * caculateService.getNoESBCoverage() -
                 noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() ) / (double) sum();
     }
+
+    public static double caculateInteroperabilitywithoutTS(CaculateService caculateService){
+        if (!caculateService.isTS()) {
+            System.out.println("caculateService.getSeparatedDatabaseCoverage()" + caculateService.getSeparatedDatabaseCoverage());
+            System.out.println("caculateService.getAppropriateSvcIntimacyCoverage()" + caculateService.getAppropriateSvcIntimacyCoverage());
+            System.out.println("getUnitaryStandardsCoverage" + caculateService.getUnitaryStandardsCoverage());
+            return (noServiceGreedy * caculateService.getNoServiceGreedyCoverage() + separatedDatabase * caculateService.getSeparatedDatabaseCoverage() +
+                    appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() -
+                    noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() + noESB * caculateService.getNoESBCoverage() -
+                    noCircleDependencies * caculateService.getNoCircleDependenciesCoverage()) / ((double) sum() - unitaryStandards);
+        }
+        else return caculateInteroperability(caculateService);
+    }
     public static void main(String[] args) {
         System.out.println(Interoperability.sum());
     }

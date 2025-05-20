@@ -43,6 +43,19 @@ public class Modifiability {
                 noHub * caculateService.getNoHubCoverage() + noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() +
                 noMultipath * caculateService.getNoMultipathCoverage() + noESB * caculateService.getNoESBCoverage()) / (double) sum();
     }
+
+    public static double caculateModifiabilitywithoutTS(CaculateService caculateService){
+        if (!caculateService.isTS()) {
+            return (hasApiVersion * caculateService.getHasApiVersionCoverage() + noCircleDependencies * caculateService.getNoCircleDependenciesCoverage() +
+                    noHardcode * caculateService.getNoHardcodeCoverage() + noServiceGreedy * caculateService.getNoServiceGreedyCoverage() +
+                    hasApiGateway * caculateService.getHasApiGatewayCoverage() + separatedDependency * caculateService.getSeparatedDependencyCoverage() +
+                    separatedDatabase * caculateService.getSeparatedDatabaseCoverage() + appropriateSvcIntimacy * caculateService.getAppropriateSvcIntimacyCoverage() + correctServicesCut * caculateService.getCorrectServicesCutCoverage() +
+                    noHub * caculateService.getNoHubCoverage() + noScatteredFunctionality * caculateService.getNoScatteredFunctionalityCoverage() +
+                    noMultipath * caculateService.getNoMultipathCoverage() + noESB * caculateService.getNoESBCoverage()) / ((double) sum() - unitaryStandards);
+
+        }
+        else return caculateModifiability(caculateService);
+    }
     public static void main(String[] args) {
         System.out.println(Modifiability.sum());
     }
